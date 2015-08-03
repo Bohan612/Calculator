@@ -24,7 +24,7 @@ int main()
 		if (priOp_1 > 0)
 		{
 			Item priItem_1;
-			priItem_1.exprR = "": ////... 
+			priItem_1.exprR = "": ////... ////...
 		}
 		else if (priOp_2 > 0)
 		{
