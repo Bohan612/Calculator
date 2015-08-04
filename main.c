@@ -105,19 +105,37 @@ int parseExpr(char expr[], int resOf)
 		int op_1 = 0;
 		int op_2 = 0;
 		int opToUse = 0;
+		int skip = 0;
+		int skipL = 0;
+		
+		//// Get rid of parensis.
+		if (expr[0] == '(' && expr[strlen(expr) - 1] == ')')
+		{
+			expr = &expr[1];
+			expr[strlen(expr) - 1] = '\0';
+		}
+		
+		//// Determine operation.
 		int i;
 		for(i = 0; expr[i] != '\0'; ++i)
 		{
 			char ch = expr[i];
-			if (ch == '-' || ch == '+')
+			
+			if (ch == '(')
+				skip = 1, ++skipL;
+			else if (ch == ')')
 			{
-				op_1 = i;
-				////break;
+				--skipL;
+				if (skipL == 0)
+					skip = 0;
 			}
-			else if (ch == '*' || ch == '/')
+			
+			if (!skip)
 			{
-				op_2 = i;
-				////break;
+				if (ch == '-' || ch == '+')
+					op_1 = i;
+				else if (ch == '*' || ch == '/')
+					op_2 = i;
 			}
 		}
 		
