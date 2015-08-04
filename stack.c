@@ -1,11 +1,11 @@
 #include "main.h"
 
-Item stack[MAXLEN];
+Item stack[STACKHEIGHT];
 int top = 0;
 
 void push(Item i)
 {
-	if (top > MAXLEN -1)
+	if (top > STACKHEIGHT -1)
 		printf("Error: Stack overflowed."), exit(1);
 	
 	stack[top] = i;

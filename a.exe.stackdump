@@ -1,0 +1,7 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=6115D363
+eax=3FF00000 ebx=0040307E ecx=00000010 edx=3FF00000 esi=00000000 edi=3FF00000
+ebp=0028C968 esp=0028C964 program=C:\Users\Bohan\Desktop\Calculator\a.exe, pid 3744, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+0028C968  6115D363 (3FF00000, 0028CA34, 0040307E, 00000001)

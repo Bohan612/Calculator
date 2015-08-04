@@ -1,6 +1,6 @@
-//// Hours: 8 + 1.5 + 1 + 1 + 1
+//// Hours: 8 + 1.5 + 1 + 1 + 1 + 1
 //// Resolve strncpy, strcpy
-//// Draft A: no parensis, only integer, only basic operations.
+//// MS A: no parensis, only integer, only basic operations, only positive number.
 
 #include "main.h"
 
@@ -17,42 +17,44 @@ int main()
 			printf("= %s\n", line);
 		}
 		
-		print("First while.");
+		print("%s\n", "FW.");
 		
 		while (!isEmpty())
 		{
-			printf("second while. top: %d\n", height());
+			//printf("SW. top: %d\n", height());
 			
 			Item* item = peek();
 			
 			if (item->ld == 0)
 			{
-				print("a");
+				print("%s\n", "a");
 				//// push left onto stack
+				//printf("item->exprL : %s\n", item->exprL);
 				int isNum = parseExpr(item->exprL, 0);
-				printf("isNum : %d\n", isNum);
+				//printf("isNum : %d\n", isNum);
 				if (isNum)
 				{
 					int res = atoi(item->exprL);
-					printf("res : %d\n", res);
+					//printf("res : %d\n", res);
 					item->lr = res;
 					item->ld = 1;
 				}
 			}
 			else if (item->rd == 0)
 			{
-				print("b");
+				print("%s\n", "b");
 				int isNum = parseExpr(item->exprR, 1);
 				if (isNum)
 				{
 					int res = atoi(item->exprR);
+					//printf("res : %d\n", res);
 					item->rr = res;
 					item->rd = 1;					
 				}
 			}
 			else
 			{
-				print("c");
+				print("%s\n", "c");
 				//// Both right left done, perform operation.
 				int value;
 				if (item->op == '+')
@@ -63,6 +65,9 @@ int main()
 					value = item->lr * item->rr;
 				else if (item->op == '/')
 					value = item->lr / item->rr;
+					
+				//printf("expr: %f, %c, %f\n", item->lr, item->op, item->rr);
+				//printf("value: %d\n", value);
 					
 				Item* justPop = pop();
 				
@@ -94,6 +99,7 @@ int main()
 //// return 1 if Expr is a number, 0 if not. If is number, nothing gets pushed to stack.
 int parseExpr(char expr[], int resOf)
 {
+	//printf("expr %s\n", expr);
 		int op_1 = 0;
 		int op_2 = 0;
 		int opToUse = 0;
@@ -102,9 +108,15 @@ int parseExpr(char expr[], int resOf)
 		{
 			char ch = expr[i];
 			if (ch == '-' || ch == '+')
+			{
 				op_1 = i;
+				////break;
+			}
 			else if (ch == '*' || ch == '/')
+			{
 				op_2 = i;
+				////break;
+			}
 		}
 		
 		//// Determine priority.
@@ -117,9 +129,11 @@ int parseExpr(char expr[], int resOf)
 		
 		if (opToUse > 0)
 		{
+			//printf("opToUse %d\n", opToUse);
 			Item newItem;
-			strncpy(newItem.exprL, expr, opToUse - 1);
+			mstrncpy(newItem.exprL, expr, opToUse);
 			strcpy(newItem.exprR, &expr[opToUse + 1]); 
+			//printf("L: %s, R: %s\n\n", newItem.exprL, newItem.exprR);
 			newItem.op = expr[opToUse]; 
 			newItem.ld = 0; 
 			newItem.rd = 0; 
@@ -134,9 +148,21 @@ int parseExpr(char expr[], int resOf)
 		}
 }
 
-void print(char s[])
+void print(char form[], char s[])
 {
-	printf("%s\n", s);
+	return;
+	printf(form, s);
+}
+
+void mstrncpy(char s1[], char s2[], int n)
+{
+	int i = 0;
+	for (;i < n; ++i)
+	{
+		s1[i] = s2[i];
+	}
+	
+	s1[i] = '\0';
 }
 
 

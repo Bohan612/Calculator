@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define MAXLEN 1000
+#define STACKHEIGHT 10
 
 typedef struct 
 {
@@ -19,5 +20,6 @@ Item* pop();
 int isEmpty();
 Item* peek();
 int parseExpr(char expr[], int resOf);
-void print(char s[]);
+void print(char form[], char s[]);
 int height();
+void mstrncpy(char s1[], char s2[], int n);
