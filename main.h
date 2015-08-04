@@ -23,3 +23,4 @@ int parseExpr(char expr[], int resOf);
 void print(char form[], char s[]);
 int height();
 void mstrncpy(char s1[], char s2[], int n);
+char * cleanExpr(char expr[]);
