@@ -1,8 +1,9 @@
-//// Hours: 8 + 1.5 + 1 + 1 + 1 + 4
+//// Hours: 8 + 1.5 + 1 + 1 + 1 + 4 + 2 + 1
 //// Resolve strncpy, strcpy
 //// MS A: only integer, no parensis, only positive number, only basic operations.
 //// MS B: Support double.
 //// MS C: Support parensis.
+//// MS D: Support negative number.
 
 #include "main.h"
 
@@ -101,19 +102,47 @@ int main()
 //// return 1 if Expr is a number, 0 if not. If is number, nothing gets pushed to stack.
 int parseExpr(char expr[], int resOf)
 {
-	//printf("expr %s\n", expr);
+	printf("expr %s\n", expr);
 		int op_1 = 0;
 		int op_2 = 0;
 		int opToUse = 0;
 		int skip = 0;
 		int skipL = 0;
 		
-		//// Get rid of parensis.
-		if (expr[0] == '(' && expr[strlen(expr) - 1] == ')')
+		//// Get rid of white spaces, return symbols, then parensis.
+		int j = 0;
+		while(expr[j] == ' ')
+			++j;
+			
+		expr = &expr[j];
+		
+		char * ptr = &expr[strlen(expr) - 1];
+		while (*ptr == ' '  || *ptr == '\r' || *ptr == '\n')
+			--ptr;
+		
+		*(ptr + 1) = '\0';
+		
+		//printf("expr[0] %c, *ptr %c\n", expr[0], *ptr);
+		
+		if (expr[0] == '(' && *ptr == ')')
 		{
-			expr = &expr[1];
-			expr[strlen(expr) - 1] = '\0';
+			int notTrimYet = 0;
+			int k; 
+			for(k=1; k<strlen(expr)-1;++k)
+				if (expr[k] == '(')
+					break;
+				else if (expr[k] == ')')
+					notTrimYet = 1;
+				
+			
+			if (!notTrimYet)
+			{
+				expr = &expr[1];
+				*ptr = '\0';
+			}
 		}
+		
+		//printf("%s\n", expr);
 		
 		//// Determine operation.
 		int i;
@@ -128,6 +157,8 @@ int parseExpr(char expr[], int resOf)
 				--skipL;
 				if (skipL == 0)
 					skip = 0;
+				else if (skipL < 0)
+					printf("Error: unbalanced parensis."), exit(1);
 			}
 			
 			if (!skip)
