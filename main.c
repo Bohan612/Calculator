@@ -1,6 +1,8 @@
-//// Hours: 8 + 1.5 + 1 + 1 + 1 + 1
+//// Hours: 8 + 1.5 + 1 + 1 + 1 + 4
 //// Resolve strncpy, strcpy
-//// MS A: no parensis, only integer, only basic operations, only positive number.
+//// MS A: only integer, no parensis, only positive number, only basic operations.
+//// MS B: Support double.
+//// MS C: Support parensis.
 
 #include "main.h"
 
@@ -34,7 +36,7 @@ int main()
 				//printf("isNum : %d\n", isNum);
 				if (isNum)
 				{
-					int res = atoi(item->exprL);
+					double res = atof(item->exprL);
 					//printf("res : %d\n", res);
 					item->lr = res;
 					item->ld = 1;
@@ -46,7 +48,7 @@ int main()
 				int isNum = parseExpr(item->exprR, 1);
 				if (isNum)
 				{
-					int res = atoi(item->exprR);
+					double res = atof(item->exprR);
 					//printf("res : %d\n", res);
 					item->rr = res;
 					item->rd = 1;					
@@ -56,7 +58,7 @@ int main()
 			{
 				print("%s\n", "c");
 				//// Both right left done, perform operation.
-				int value;
+				double value;
 				if (item->op == '+')
 					value = item->lr + item->rr;
 				else if (item->op == '-')
@@ -87,7 +89,7 @@ int main()
 				}
 				else
 				{
-					printf("= %d\n", value);
+					printf("= %f\n", value);
 				}
 			}
 		}
