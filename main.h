@@ -4,7 +4,7 @@
 #include <math.h>
 
 #define MAXLEN 1000
-#define STACKHEIGHT 10
+#define STACKHEIGHT 1000
 
 typedef struct 
 {
@@ -25,3 +25,4 @@ void print(char form[], char s[]);
 int height();
 void mstrncpy(char s1[], char s2[], int n);
 char * cleanExpr(char expr[]);
+int isOpChar(char c);

@@ -1,24 +1,39 @@
-//// Hours: 8 + 1.5 + 1 + 1 + 1 + 4 + 2 + 1 + 1 + 1.5
+//// Hours: 8 + 1.5 + 1 + 1 + 1 + 4 + 2 + 1 + 1 + 1.5 + 5
 //// Resolve strncpy, strcpy
-//// MS A: only integer, no parensis, only positive number, only basic operations.
+//// MS A: only integer, no parensis, only positive number, only basic operations, no space.
 //// MS B: Support double.
 //// MS C: Support parensis.
 //// MS D: Support negative number.
 //// MS E: Add ^ operation.
+//// MS F: Big input filter for white space etc.
 
 #include "main.h"
 
 char line[MAXLEN];
+char opChar[6] = {'+', '-', '*', '/', '^'};
+
+int isOpChar(char c)
+{
+	int i = 0;
+	for(; i < strlen(opChar); ++i)
+	{
+		if (opChar[i] == c)
+			return 1;
+	}
+	
+	return 0;
+}
 
 int main()
 {
 	int len;
 	while (len = mgetline(line, MAXLEN) > 0)
 	{
-		int isNum = parseExpr(line, -1);
+		char * cleanLine = cleanExpr(line);
+		int isNum = parseExpr(cleanLine, -1);
 		if (isNum)
 		{
-			printf("= %s\n", line);
+			printf("= %s\n", cleanLine);
 		}
 		
 		print("%s\n", "FW.");
@@ -135,9 +150,10 @@ char * cleanExpr(char expr[])
 //// return 1 if Expr is a number, 0 if not. If is number, nothing gets pushed to stack.
 int parseExpr(char expr[], int resOf)
 {
-	int op_1 = 0;
-	int op_2 = 0;
-	int op_3 = 0;
+	int op_1 = 0;		//// +, -
+	int op_2 = 0;		//// *, /
+	int op_3 = 0;		//// ^
+	int op_4 = 0;		//// -
 	int opToUse = 0;
 	int skip = 0;
 	int skipL = 0;
@@ -161,12 +177,14 @@ int parseExpr(char expr[], int resOf)
 		
 		if (!skip)
 		{
-			if (ch == '-' || ch == '+')
+			if ((ch == '-' && expr[i-1] >= '0' && expr[i-1] <= '9') || ch == '+')
 				op_1 = i;
 			else if (ch == '*' || ch == '/')
 				op_2 = i;
 			else if (ch == '^')
 				op_3 = i;
+			else if (ch == '-' && (i == 0 || isOpChar(expr[i-1]))
+				op_4 = i;
 		}
 	}
 	
@@ -180,12 +198,14 @@ int parseExpr(char expr[], int resOf)
 	else
 		opToUse = 0;
 	
+	printf("opToUse: %d\n", opToUse);
+	
 	if (opToUse > 0)
 	{
 		Item newItem;
 		mstrncpy(newItem.exprL, expr, opToUse);
 		strcpy(newItem.exprR, &expr[opToUse + 1]); 
-		//printf("L: %s, R: %s\n\n", newItem.exprL, newItem.exprR);
+		printf("L: %s, R: %s\n\n", newItem.exprL, newItem.exprR);
 		newItem.op = expr[opToUse]; 
 		newItem.ld = 0; 
 		newItem.rd = 0; 
