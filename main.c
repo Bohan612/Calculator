@@ -24,9 +24,7 @@ int main()
 		print("%s\n", "FW.");
 		
 		while (!isEmpty())
-		{
-			//printf("SW. top: %d\n", height());
-			
+		{			
 			Item* item = peek();
 			
 			if (item->ld == 0)
@@ -35,7 +33,6 @@ int main()
 				//// push left onto stack
 				char * ptrL = cleanExpr(item->exprL);
 				int isNum = parseExpr(ptrL, 0);
-				//printf("isNum : %d\n", isNum);
 				if (isNum)
 				{
 					double res = atof(ptrL);
@@ -70,9 +67,8 @@ int main()
 					value = item->lr * item->rr;
 				else if (item->op == '/')
 					value = item->lr / item->rr;
-					
-				//printf("expr: %f, %c, %f\n", item->lr, item->op, item->rr);
-				//printf("value: %d\n", value);
+				else if (item->op == '^')
+					value = pow(item->lr, item->rr);
 					
 				Item* justPop = pop();
 				
@@ -116,8 +112,6 @@ char * cleanExpr(char expr[])
 	
 	*(ptr + 1) = '\0';
 	
-	//printf("expr[0] %c, *ptr %c\n", expr[0], *ptr);
-	
 	if (expr[0] == '(' && *ptr == ')')
 	{
 		int notTrimYet = 0;
@@ -141,14 +135,12 @@ char * cleanExpr(char expr[])
 //// return 1 if Expr is a number, 0 if not. If is number, nothing gets pushed to stack.
 int parseExpr(char expr[], int resOf)
 {
-	//printf("expr %s\n", expr);
 	int op_1 = 0;
 	int op_2 = 0;
+	int op_3 = 0;
 	int opToUse = 0;
 	int skip = 0;
 	int skipL = 0;
-	
-	//printf("%s\n", expr);
 	
 	//// Determine operation.
 	int i;
@@ -173,6 +165,8 @@ int parseExpr(char expr[], int resOf)
 				op_1 = i;
 			else if (ch == '*' || ch == '/')
 				op_2 = i;
+			else if (ch == '^')
+				op_3 = i;
 		}
 	}
 	
@@ -181,12 +175,13 @@ int parseExpr(char expr[], int resOf)
 		opToUse = op_1;
 	else if (op_2 > 0)
 		opToUse = op_2;
+	else if (op_3 > 0)
+		opToUse = op_3;
 	else
 		opToUse = 0;
 	
 	if (opToUse > 0)
 	{
-		//printf("opToUse %d\n", opToUse);
 		Item newItem;
 		mstrncpy(newItem.exprL, expr, opToUse);
 		strcpy(newItem.exprR, &expr[opToUse + 1]); 
@@ -201,7 +196,6 @@ int parseExpr(char expr[], int resOf)
 	else
 	{
 		//// Whole string is a number.
-		//printf("expr str: %s\n", expr);
 		return 1;
 	}
 }
