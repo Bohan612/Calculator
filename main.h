@@ -4,7 +4,7 @@
 #include <math.h>
 
 #define MAXLEN 1000
-#define STACKHEIGHT 10
+#define STACKHEIGHT 1000
 
 typedef struct 
 {

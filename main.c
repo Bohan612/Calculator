@@ -1,4 +1,4 @@
-//// Hours: 8 + 1.5 + 1 + 1 + 1 + 4 + 2 + 1 + 1 + 1.5 + 5
+//// Hours: 8 + 1.5 + 1 + 1 + 1 + 4 + 2 + 1 + 1 + 1.5 + 5 + 7 = 34
 //// Resolve strncpy, strcpy
 //// MS A: only integer, no parensis, only positive number, only basic operations, no space.
 //// MS B: Support double.
@@ -118,7 +118,7 @@ char * cleanLine(char newLine[], char line[])
 	int i, j;
 	for (i=0, j=0; i<MAXLEN; ++i)
 	{
-		if (line[i] != ' ' && line[i] != '\r' && line[i] != '\n')
+		if (line[i] != ' ' && line[i] != '\r' && line[i] != '\n' && line[i] != '\t')
 		{
 			newLine[j] = line[i];
 			++j;
@@ -193,13 +193,13 @@ int parseExpr(char expr[], int resOf)
 		
 		if (!skip)
 		{
-			if ((ch == '-' && i > 0 && expr[i-1] >= '0' && expr[i-1] <= '9') || ch == '+')
+			if ((ch == '-' && i > 0 && ((expr[i-1] >= '0' && expr[i-1] <= '9') || (expr[i-1] == ')'))) || ch == '+')
 				op_1 = i;
 			else if (ch == '*' || ch == '/')
 				op_2 = i;
 			else if (ch == '^')
 				op_3 = i;
-			else if (ch == '-' && (i == 0 || (i > 0 && isOpChar(expr[i-1]))))
+			else if (ch == '-' && (i == 0 || (i > 0 && (isOpChar(expr[i-1]) || expr[i-1] == '('))))
 				op_4 = i;
 		}
 	}
